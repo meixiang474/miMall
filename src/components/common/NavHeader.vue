@@ -10,7 +10,7 @@
         </div>
         <div class="topbar-user">
           <a href="javascript:;" v-if="username">{{username}}</a>
-          <a href="javascript:;" @click="login" v-if="!username">登录</a>
+          <a href="/#/login" v-if="!username">登录</a>
           <a href="javascript:;" v-if="username">我的订单</a>
           <a
           href="javascript:;"
@@ -72,11 +72,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
+  computed: {
+    ...mapGetters(['username'])
+  },
   data () {
     return {
-      phoneList: [],
-      username: 'jack'
+      phoneList: []
     }
   },
   methods: {
@@ -92,9 +95,6 @@ export default {
       })
     },
     goToCart () {
-      this.$router.push('/cart')
-    },
-    login () {
       this.$router.push('/cart')
     }
   },
@@ -152,40 +152,7 @@ export default {
         display: flex;
         align-items: center;
          position: relative;
-        .header-logo{
-          flex:0 0 55px;
-          display: inline-block;
-          width: 55px;
-          height: 55px;
-          background: #ff6600;
-          overflow: hidden;
-          a{
-            display: inline-block;
-            width: 110px;
-            height: 55px;
-            &:before{
-              content: '';
-              display: inline-block;
-              width: 55px;
-              height: 55px;
-              background: url('/imgs/mi-logo.png') no-repeat center;
-              background-size: contain;
-              transition: margin .2s;
-            }
-            &:after{
-              content: '';
-              display: inline-block;
-              width: 55px;
-              height: 55px;
-              background: url('/imgs/mi-home.png') no-repeat center;
-              background-size: contain;
-            }
-            &:hover:before{
-              margin-left: -55px;
-              transition: margin .2s;
-            }
-          }
-        }
+
         .header-menu{
           display: inline-block;
 
