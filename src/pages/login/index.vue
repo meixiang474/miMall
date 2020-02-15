@@ -66,7 +66,7 @@ export default {
         username: 'admin1',
         password: 'admin2'
       }).then((res) => {
-        alert('注册成功')
+        this.$message.success('注册成功')
       })
     }
   }

@@ -7,6 +7,7 @@ import VueAxios from 'vue-axios'
 import VueLazyLoad from 'vue-lazyload'
 import VueCookie from 'vue-cookie'
 import 'swiper/dist/css/swiper.css'
+import './plugins/element.js'
 
 Vue.use(VueCookie)
 Vue.use(VueLazyLoad, {
@@ -24,7 +25,7 @@ axios.interceptors.response.use(response => {
     window.location.href = '/#/login'
     return Promise.reject(res)
   } else {
-    alert(res.msg)
+    Vue.$message.error(res.msg)
     return Promise.reject(res)
   }
 })
