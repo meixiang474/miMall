@@ -3,7 +3,7 @@
     <div class="wrapper">
       <div class="container">
         <div class="order-box">
-          <loading v-if="loading"></loading>
+
           <template>
           <div class="order" v-for="(order, index) in list" :key="index">
             <div class="order-title">
@@ -44,15 +44,13 @@
 
           </div>
           </template>
-          <el-pagination
-            v-if="list.length!==0"
-            background
-            layout="prev, pager, next"
-            :total="total"
-            :page-size="pageSize"
-            @current-change="handleChange"
+          <div class="scroll-more"
+          v-infinite-scroll="scrollMore"
+          infinite-scroll-disabled="busy"
+          infinite-scroll-distance="440"
           >
-          </el-pagination>
+          </div>
+           <loading v-if="loading"></loading>
           <no-data v-if="!loading && list.length === 0"></no-data>
         </div>
       </div>
@@ -62,6 +60,7 @@
 <script>
 import Loading from '../../components/common/Loading'
 import NoData from '../../components/common/NoData'
+import infiniteScroll from 'vue-infinite-scroll'
 export default {
   name: 'order-list',
   data () {
@@ -71,31 +70,48 @@ export default {
       pageSize: 10,
       pageNum: 1,
       total: 0,
-      timer: null
+      timer: null,
+      busy: true,
+      l: false
     }
   },
   components: {
     Loading,
     NoData
   },
+  directives: { infiniteScroll },
   mounted () {
     this.getOrderList()
   },
   methods: {
+    scrollMore () {
+      this.busy = true
+      setTimeout(() => {
+        this.pageNum++
+        this.getOrderList()
+      }, 500)
+    },
     handleChange (pageNum) {
       this.pageNum = pageNum
       this.getOrderList()
     },
     getOrderList () {
+      this.loading = true
       this.axios.get('/orders', {
         params: {
           pageNum: this.pageNum
         }
       }).then(res => {
-        this.list = res.list
+        this.list = [...this.list, ...res.list]
         this.loading = false
         this.total = res.total
-        this.timer = this.setInterval()
+        this.l = false
+        // this.timer = this.setInterval()
+        if (res.hasNextPage) {
+          this.busy = false
+        } else {
+          this.busy = true
+        }
       }).catch(() => {
         this.loading = false
       })
@@ -107,14 +123,6 @@ export default {
           orderNo
         }
       })
-    },
-    setInterval () {
-      return setInterval(() => {
-        if (document.documentElement.scrollTop === 0) {
-          clearInterval(this.timer)
-        }
-        document.documentElement.scrollTop -= 100
-      }, 10)
     }
   }
 }
@@ -179,16 +187,6 @@ export default {
               }
             }
           }
-        }
-        .el-pagination{
-          text-align:right;
-        }
-        .el-pagination.is-background .el-pager li:not(.disabled).active{
-          background-color: #FF6600;
-        }
-        .el-button--primary{
-          background-color: #FF6600;
-          border-color: #FF6600;
         }
         .load-more,.scroll-more{
           text-align:center;
