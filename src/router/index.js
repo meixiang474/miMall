@@ -10,6 +10,7 @@ const routes = [
     redirect: '/index',
     children: [
       {
+        name: 'index',
         path: 'index',
         component: () => import('../pages/home/HomeIndex.vue')
       },
@@ -42,6 +43,10 @@ const routes = [
       {
         path: 'pay',
         component: () => import('../pages/order/OrderPay.vue')
+      },
+      {
+        path: 'alipay',
+        component: () => import('../pages/alipay')
       }
     ]
   },
@@ -49,6 +54,7 @@ const routes = [
     path: '/login',
     component: () => import('../pages/login')
   }
+
 ]
 
 const router = new VueRouter({

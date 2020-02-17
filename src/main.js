@@ -8,6 +8,7 @@ import VueLazyLoad from 'vue-lazyload'
 import VueCookie from 'vue-cookie'
 import 'swiper/dist/css/swiper.css'
 import './plugins/element.js'
+import './assets/fonts/iconfont.css'
 
 Vue.use(VueCookie)
 Vue.use(VueLazyLoad, {
@@ -23,11 +24,16 @@ axios.interceptors.response.use(response => {
     return res.data
   } else if (res.status === 10) {
     window.location.href = '/#/login'
+    Vue.$message.warning('请先登录')
     return Promise.reject(res)
   } else {
     Vue.$message.error(res.msg)
     return Promise.reject(res)
   }
+}, error => {
+  const res = error.response
+  Vue.$message.error(res.data.message)
+  return Promise.reject(error)
 })
 
 Vue.use(VueAxios, axios)

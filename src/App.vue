@@ -20,7 +20,7 @@ export default {
       })
     },
     getCartCount () {
-      this.axios.get('/carts/products/sum').then((res = 0) => {
+      this.axios.get('/carts/products/sum').then((res) => {
         this.saveCartCount(res)
       })
     }

@@ -45,7 +45,8 @@ export default {
       username: '',
       password: '',
       userId: '',
-      res: {}
+      res: {},
+      from: ''
     }
   },
   methods: {
@@ -58,7 +59,10 @@ export default {
       }).then(res => {
         this.$cookie.set('userId', res.id, { expires: '1M' })
         this.saveUserName(res.username)
-        this.$router.push('/#/index')
+        return this.axios.get('/carts/products/sum')
+      }).then((res) => {
+        this.$store.dispatch('saveCartCount', res)
+        this.$router.back(-1)
       })
     },
     register () {

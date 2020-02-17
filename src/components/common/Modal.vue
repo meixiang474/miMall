@@ -1,24 +1,26 @@
 <template>
-  <transition name="slide">
+  <transition name="fade">
     <div class="modal" v-show="showModal">
       <div class="mask"></div>
-      <div class="modal-dialog">
-        <div class="modal-header">
-          <span>{{title}}</span>
-          <a href="javascript:;" class="icon-close" @click="$emit('cancel')"></a>
-        </div>
-        <div class="modal-body">
-          <slot name="body"></slot>
-        </div>
-        <div class="modal-footer">
-          <a href="javascript:;" class="btn" v-if="btnType === '1'" @click="$emit('submit')">{{sureText}}</a>
-          <a href="javascript:;" class="btn" v-else-if="btnType === '2'" @click="$emit('cancel')">{{cancelText}}</a>
-          <div class="btn-group" v-else>
-            <a href="javascript:;" class="btn" @click="$emit('submit')">{{sureText}}</a>
-            <a href="javascript:;" class="btn btn-default"  @click="$emit('cancel')">{{cancelText}}</a>
+      <transition name="slide">
+        <div class="modal-dialog" v-show="showModal">
+          <div class="modal-header">
+            <span>{{title}}</span>
+            <a href="javascript:;" class="icon-close" @click="$emit('cancel')"></a>
+          </div>
+          <div class="modal-body">
+            <slot name="body"></slot>
+          </div>
+          <div class="modal-footer">
+            <a href="javascript:;" class="btn" v-if="btnType === '1'" @click="$emit('submit')">{{sureText}}</a>
+            <a href="javascript:;" class="btn" v-else-if="btnType === '2'" @click="$emit('cancel')">{{cancelText}}</a>
+            <div class="btn-group" v-else>
+              <a href="javascript:;" class="btn" @click="$emit('submit')">{{sureText}}</a>
+              <a href="javascript:;" class="btn btn-default"  @click="$emit('cancel')">{{cancelText}}</a>
+            </div>
           </div>
         </div>
-      </div>
+      </transition>
     </div>
   </transition>
 </template>
@@ -39,7 +41,7 @@ export default {
       type: String,
       default: '确定'
     },
-    cancalText: {
+    cancelText: {
       type: String,
       default: '取消'
     },
@@ -54,14 +56,23 @@ export default {
   @include position(fixed);
   z-index: 10;
   transition: top .5s;
-  &.slide-enter {
-    top: -100%;
+  &.fade-enter {
+    opacity: 0;
   }
-  &.slide-enter-active{
-    top: 0;
+  &.fade-enter-active{
+    transition: all .5s;
   }
-  &.slide-leave-active{
-    top: -100%;
+  &.fade-enter-to{
+    opacity: 1;
+  }
+  &.fade-leave{
+    opacity: 1;
+  }
+  &.fade-leave-active{
+    transition: all .5s;
+  }
+  &.fade-leave-to{
+    opacity: 0;
   }
   .mask{
     @include position(fixed);
@@ -72,6 +83,15 @@ export default {
     @include position(absolute, 40%, 50%, 660px, auto);
     background-color: $colorG;
     transform: translate(-50%, -50%);
+    &.slide-enter, &.slide-leave-to{
+      top: -100%;
+    }
+    &.slide-enter-to, &.slide-leave{
+      top: 40%;
+    }
+    &.slide-enter-active, &.slide-leave-active{
+      transition: all .5s;
+    }
     .modal-header{
       height: 60px;
       background-color: $colorJ;
