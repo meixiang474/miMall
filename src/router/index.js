@@ -27,6 +27,7 @@ const routes = [
   {
     path: '/cart',
     component: () => import('../pages/cart')
+    // resolve => require([''], resolve)
   },
   {
     path: '/order',

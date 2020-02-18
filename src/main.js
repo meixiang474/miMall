@@ -24,15 +24,15 @@ axios.interceptors.response.use(response => {
     return res.data
   } else if (res.status === 10) {
     window.location.href = '/#/login'
-    Vue.$message.warning('请先登录')
+    Vue.prototype.$message.warning('请先登录')
     return Promise.reject(res)
   } else {
-    Vue.$message.error(res.msg)
+    Vue.prototype.$message.error(res.msg)
     return Promise.reject(res)
   }
 }, error => {
   const res = error.response
-  Vue.$message.error(res.data.message)
+  Vue.prototype.$message.error(res.data.message)
   return Promise.reject(error)
 })
 
